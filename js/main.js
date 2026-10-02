@@ -356,6 +356,26 @@
   });
 
   // ================= 右侧栏：故事 =================
+  const PLACE_NAMES = {
+    '40k': '40 Kirkland',
+    alley: '暗巷',
+    bar: '酒吧',
+    finance: '金融街',
+    bc: '研究所',
+    dock: '码头',
+    rest: '绿线休息室',
+  };
+
+  function posDisplay(pid, tid) {
+    const pos = POSITIONS.data[`${pid}@${tid}`];
+    if (!pos) return '';
+    if (pos.from && pos.to) {
+      return `${PLACE_NAMES[pos.from] || pos.from} → ${PLACE_NAMES[pos.to] || pos.to}`;
+    }
+    if (pos.loc) return PLACE_NAMES[pos.loc] || pos.loc;
+    return '';
+  }
+
   function renderStory() {
     storyListEl.innerHTML = '';
     if (state.selectedPlayers.size === 0 || state.selectedPoints.size === 0) {
@@ -371,18 +391,29 @@
         const story = DATA.stories[`${player.id}@${p.id}`];
         if (!story) return;
         rendered++;
-        const locName = (story.loc && locById[story.loc]) ? locById[story.loc].name : (story.loc || '');
+        const locName = posDisplay(player.id, p.id);
         const text = state.mode === 'full' ? (story.full || story.concise) : (story.concise || story.full);
+
         const block = document.createElement('div');
         block.className = 'story-block';
-        block.innerHTML =
-          `<div class="sb-head">` +
-            `<span class="dot" style="background:${player.color}"></span>` +
-            `<span class="who">${player.name}</span>` +
-            `<span class="time-chip">${p.label}</span>` +
-            (locName ? `<span class="loc-name">@ ${locName}</span>` : '') +
-          `</div>` +
-          (text ? `<p>${text}</p>` : `<div class="no-story">暂无故事</div>`);
+        const head = document.createElement('div');
+        head.className = 'sb-head';
+        head.innerHTML =
+          `<span class="dot" style="background:${player.color}"></span>` +
+          `<span class="who">${player.name}</span>` +
+          `<span class="time-chip">${p.label}</span>` +
+          (locName ? `<span class="loc-name">@ ${locName}</span>` : '');
+        block.appendChild(head);
+        if (text) {
+          const para = document.createElement('p');
+          para.textContent = text;
+          block.appendChild(para);
+        } else {
+          const empty = document.createElement('div');
+          empty.className = 'no-story';
+          empty.textContent = '暂无故事';
+          block.appendChild(empty);
+        }
         storyListEl.appendChild(block);
       });
     });
@@ -419,10 +450,10 @@
             `<span class="ac-time">${ap}</span>` +
           `</div>` +
           `<div class="ac-grid">` +
-            `<span class="k">财富</span><span class="v">${status.wealth ?? '?'}</span>` +
-            `<span class="k">力量</span><span class="v">${status.strength ?? '?'}</span>` +
-            `<span class="k">魅力</span><span class="v">${status.charm ?? '?'}</span>` +
-            `<span class="k">洞察</span><span class="v">${status.insight ?? '?'}</span>` +
+            `<span>财富 ${status.wealth ?? '?'}</span>` +
+            `<span>力量 ${status.strength ?? '?'}</span>` +
+            `<span>魅力 ${status.charm ?? '?'}</span>` +
+            `<span>洞察 ${status.insight ?? '?'}</span>` +
           `</div>` +
           `<div class="ac-row"><span class="k">金钱：</span>${status.money ?? '?'}</div>` +
           `<div class="ac-row"><span class="k">血量：</span>${status.hp ?? '?'}</div>` +

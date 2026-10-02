@@ -1,6 +1,7 @@
 # 临时提取/工作文件，不上传
 _docx_media/
 _docx_text.txt
+_story_text.txt
 第一章语言记录/
 __pycache__/
 *.pyc

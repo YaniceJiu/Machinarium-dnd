@@ -171,9 +171,9 @@ body { position: relative; }
   cursor: default;
 }
 .marker .dot {
-  width: 16px; height: 16px;
+  width: 32px; height: 32px;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 3px solid #fff;
   box-shadow: 0 0 6px rgba(0,0,0,.5);
 }
 .marker .m-time {
@@ -196,7 +196,7 @@ body { position: relative; }
 }
 .route-line {
   stroke: #2e8b57;
-  stroke-width: 4;
+  stroke-width: 8;
   stroke-linecap: round;
   opacity: .8;
 }
@@ -244,14 +244,13 @@ body { position: relative; }
   font-weight: 700;
 }
 .attr-card .ac-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
   font-size: 12.5px;
   margin-bottom: 6px;
 }
-.attr-card .ac-grid .k { color: var(--muted); }
-.attr-card .ac-grid .v { text-align: right; font-weight: 600; }
+.attr-card .ac-grid span { white-space: nowrap; font-weight: 600; }
 .attr-card .ac-row { font-size: 12.5px; margin-top: 2px; }
 .attr-card .ac-row .k { color: var(--muted); }
 .attr-card .ac-items { font-size: 12px; color: var(--text); }
@@ -407,7 +406,7 @@ body { position: relative; }
   font-weight: 700;
 }
 .story-block .loc-name { font-size: 12px; color: var(--muted); }
-.story-block p { font-size: 13.5px; line-height: 1.6; }
+.story-block p { font-size: 13.5px; line-height: 1.6; white-space: pre-line; }
 .story-block .no-story { color: var(--muted); font-size: 12.5px; }
 
 #storyEmpty {
