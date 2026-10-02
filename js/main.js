@@ -5,6 +5,7 @@
   const CFG = window.CONFIG;
   const DATA = window.DATA || { stories: {}, status: {}, locations: {} };
   const SCENES = window.SCENES || { locContent: {}, shop: { street: {}, shops: {}, interior: {}, products: [] } };
+  const POSITIONS = window.POSITIONS || { extra: {}, data: {} };
 
   // ---- 状态 ----
   const state = {
@@ -48,6 +49,7 @@
   const lmScenes = $('#lmScenes');
   const lmProducts = $('#lmProducts');
   const lmToast = $('#lmToast');
+  let routeLayer;
 
   // ================= 时间轴 =================
   function buildTimeline() {
@@ -143,6 +145,13 @@
     const mapImg = $('#mapImg');
     mapImg.src = CFG.map.src;
 
+    // 绿线图层（画在图标下面）
+    routeLayer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    routeLayer.setAttribute('class', 'route-layer');
+    routeLayer.setAttribute('width', CFG.map.w);
+    routeLayer.setAttribute('height', CFG.map.h);
+    world.appendChild(routeLayer);
+
     // 地点图标
     CFG.locations.forEach((loc) => {
       const img = document.createElement('img');
@@ -231,43 +240,80 @@
     }, { passive: false });
   }
 
-  // ================= 玩家位置标记 =================
+  // ================= 玩家位置标记（含绿线） =================
+  function resolveAnchor(placeKey) {
+    if (POSITIONS.extra && POSITIONS.extra[placeKey]) return POSITIONS.extra[placeKey];
+    const loc = locById[placeKey];
+    if (!loc) return null;
+    return { x: loc.x, y: loc.y, lift: loc.h * loc.scale + 8 };
+  }
+
+  function placeMarker(player, p, x, y) {
+    const marker = document.createElement('div');
+    marker.className = 'marker';
+    marker.style.left = x + 'px';
+    marker.style.top = y + 'px';
+    marker.title = `${player.name} · ${p.label}`;
+    marker.innerHTML =
+      `<div class="dot" style="background:${player.color}"></div>` +
+      `<div class="m-time">${p.label}</div>`;
+    world.appendChild(marker);
+  }
+
   function renderMarkers() {
-    // 清除旧标记
     world.querySelectorAll('.marker').forEach((m) => m.remove());
+    if (routeLayer) routeLayer.innerHTML = '';
 
     if (state.selectedPlayers.size === 0 || state.selectedPoints.size === 0) return;
 
-    // locationId -> [{pid, tid}]
-    const byLoc = {};
     const selectedPoints = allPoints.filter((p) => state.selectedPoints.has(p.id));
+    const byLoc = {};    // 地点键 -> [{player, p, a}]
+    const byRoute = {};  // 'from->to' -> [{player, p, a, b}]
 
     state.selectedPlayers.forEach((pid) => {
+      const player = playerById[pid];
       selectedPoints.forEach((p) => {
-        const story = DATA.stories[`${pid}@${p.id}`];
-        if (!story || !story.loc) return;
-        const locId = story.loc;
-        (byLoc[locId] = byLoc[locId] || []).push({ pid, tid: p.id, label: p.label });
+        const pos = POSITIONS.data[`${pid}@${p.id}`];
+        if (!pos) return;
+        if (pos.from && pos.to) {
+          const a = resolveAnchor(pos.from);
+          const b = resolveAnchor(pos.to);
+          if (!a || !b) return;
+          const key = pos.from + '->' + pos.to;
+          (byRoute[key] = byRoute[key] || []).push({ player, p, a, b });
+        } else if (pos.loc) {
+          const a = resolveAnchor(pos.loc);
+          if (!a) return;
+          (byLoc[pos.loc] = byLoc[pos.loc] || []).push({ player, p, a });
+        }
       });
     });
 
-    Object.keys(byLoc).forEach((locId) => {
-      const loc = locById[locId];
-      if (!loc) return;
-      const entries = byLoc[locId];
+    // 绿线 + 中点标记
+    Object.keys(byRoute).forEach((key) => {
+      const entries = byRoute[key];
+      const a = entries[0].a, b = entries[0].b;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', a.x);
+      line.setAttribute('y1', a.y);
+      line.setAttribute('x2', b.x);
+      line.setAttribute('y2', b.y);
+      line.setAttribute('class', 'route-line');
+      routeLayer.appendChild(line);
       const n = entries.length;
-      entries.forEach((entry, i) => {
-        const player = playerById[entry.pid];
-        const marker = document.createElement('div');
-        marker.className = 'marker';
-        const offsetX = (i - (n - 1) / 2) * 22;
-        marker.style.left = (loc.x + offsetX) + 'px';
-        marker.style.top = (loc.y - loc.h * loc.scale - 26) + 'px';
-        marker.title = `${player.name} · ${entry.label}`;
-        marker.innerHTML =
-          `<div class="dot" style="background:${player.color}"></div>` +
-          `<div class="m-time">${entry.label}</div>`;
-        world.appendChild(marker);
+      entries.forEach((e, i) => {
+        const off = (i - (n - 1) / 2) * 22;
+        placeMarker(e.player, e.p, (a.x + b.x) / 2 + off, (a.y + b.y) / 2);
+      });
+    });
+
+    // 单点标记（按地点分组铺开，标在图标上方）
+    Object.keys(byLoc).forEach((key) => {
+      const entries = byLoc[key];
+      const n = entries.length;
+      entries.forEach((e, i) => {
+        const off = (i - (n - 1) / 2) * 22;
+        placeMarker(e.player, e.p, e.a.x + off, e.a.y - (e.a.lift || 0));
       });
     });
   }

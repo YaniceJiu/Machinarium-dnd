@@ -55,3 +55,66 @@ window.DATA = {
     },
   },
 };
+
+// ============ 位置数据（每个人每个回合的位置 / 绿线） ============
+// 地点键：40k=40 Kirkland(含MBTA站) / alley暗巷 / bar酒吧 / finance金融街 / bc研究所 / dock码头 / rest绿线休息室
+// { loc: '地点键' } 表示单点；{ from:'A', to:'B' } 表示该回合在绿线上，A→B 之间画绿线，玩家点放中点
+window.POSITIONS = {
+  extra: { '40k': { x: 731, y: 120, lift: 26 } },
+  data: {
+    // 苏联老兵
+    'soviet@1.1': { loc: '40k' },
+    'soviet@1.2': { from: '40k', to: 'alley' },
+    'soviet@1.3': { loc: 'alley' },
+    'soviet@2.1': { loc: 'bar' },
+    'soviet@2.2': { loc: 'bar' },
+    // 华尔街之狼
+    'wolf@1.1': { from: '40k', to: 'finance' },
+    'wolf@1.2': { loc: 'finance' },
+    'wolf@1.3': { loc: 'finance' },
+    'wolf@2.1': { loc: 'finance' },
+    'wolf@2.2': { loc: 'finance' },
+    // 谢特勒
+    'shettler@1.1': { loc: '40k' },
+    'shettler@1.2': { from: '40k', to: 'bar' },
+    'shettler@1.3': { loc: 'bar' },
+    'shettler@2.1': { loc: 'bar' },
+    'shettler@2.2': { loc: 'bar' },
+    // 老钟
+    'zhong@1.1': { loc: '40k' },
+    'zhong@1.2': { from: '40k', to: 'bc' },
+    'zhong@1.3': { loc: 'bc' },
+    'zhong@2.1': { loc: 'bc' },
+    'zhong@2.2': { loc: 'bc' },
+    // 炼金术士
+    'alchemist@1.1': { from: '40k', to: 'alley' },
+    'alchemist@1.2': { loc: 'alley' },
+    'alchemist@1.3': { loc: 'alley' },
+    'alchemist@2.1': { loc: 'alley' },
+    'alchemist@2.2': { from: 'alley', to: 'bc' },
+    // 猎人
+    'hunter@1.1': { from: '40k', to: 'dock' },
+    'hunter@1.2': { loc: 'dock' },
+    'hunter@1.3': { loc: 'dock' },
+    'hunter@2.1': { loc: 'dock' },
+    'hunter@2.2': { from: 'dock', to: 'finance' },
+    // 技术工人
+    'worker@1.1': { loc: '40k' },
+    'worker@1.2': { from: '40k', to: 'bc' },
+    'worker@1.3': { loc: 'bc' },
+    'worker@2.1': { loc: 'bc' },
+    'worker@2.2': { loc: 'bc' },
+    // Sonia
+    'sonia@1.1': { loc: '40k' },
+    'sonia@1.2': { loc: '40k' },
+    'sonia@1.3': { loc: 'rest' },
+    'sonia@2.1': { from: 'rest', to: 'alley' },
+    'sonia@2.2': { from: 'alley', to: 'bc' },
+    // 安姐
+    'an@1.1': { from: '40k', to: 'bc' },
+    'an@1.2': { loc: 'bc' },
+    'an@1.3': { loc: 'bc' },
+    'an@2.1': { loc: 'bc' },
+    'an@2.2': { loc: 'bc' },
+  },
+};

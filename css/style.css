@@ -188,6 +188,19 @@ body { position: relative; }
   line-height: 1.3;
 }
 
+/* 绿线图层 */
+.route-layer {
+  position: absolute;
+  left: 0; top: 0;
+  pointer-events: none;
+}
+.route-line {
+  stroke: #2e8b57;
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: .8;
+}
+
 /* ================= 左侧属性卡 ================= */
 #attrPanel {
   position: absolute;
