@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圣状dnd · 摆放编辑器</title>
+  <link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+  <div class="editor-hint">摆图标：拖动图标、点选后用滑块调大小 ｜ 标文字：点地图直接加文字、拖动改位置、点选后改内容 / Delete 删除</div>
+
+  <div id="mapStage">
+    <div id="viewport">
+      <div id="world">
+        <img id="mapImg" src="波城地图.png" alt="波城地图">
+      </div>
+    </div>
+  </div>
+
+  <div id="editorToolbar">
+    <div class="seg" id="modeSeg">
+      <button data-mode="icon" class="active">摆图标</button>
+      <button data-mode="label">标文字</button>
+    </div>
+    <span class="tb-label" id="tbSel">未选中</span>
+    <span class="tb-label">大小</span>
+    <input type="range" id="tbScale" min="0.05" max="2" step="0.05" value="0.5">
+    <span class="tb-label" id="tbScaleVal">0.5</span>
+    <input type="text" id="tbText" placeholder="选中文字标签后在这里改内容">
+    <button class="btn" id="btnAddLabel">＋ 加文字标签</button>
+    <button class="btn" id="btnDel">删除选中</button>
+    <button class="btn primary" id="btnExport">导出 JSON</button>
+  </div>
+
+  <div id="exportPanel">
+    <div class="export-card">
+      <h3>复制下面的 JSON，粘贴给 AI 写入 js/config.js</h3>
+      <textarea id="exportText" readonly spellcheck="false"></textarea>
+      <div class="export-actions">
+        <button class="btn" id="btnCopy">复制</button>
+        <button class="btn" id="btnCloseExport">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/editor.js"></script>
+</body>
+</html>

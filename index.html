@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圣状dnd</title>
+  <link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+  <div id="mapStage">
+    <div id="viewport">
+      <div id="world">
+        <img id="mapImg" src="波城地图.png" alt="波城地图">
+      </div>
+    </div>
+    <div id="attrPanel"></div>
+  </div>
+
+  <header id="timelineBar"></header>
+
+  <aside id="sidebar">
+      <div id="sidebarBody">
+        <div class="sb-section-title">玩家</div>
+        <div class="sb-row">
+          <button id="selectAllBtn" class="btn">全选</button>
+          <div class="seg" id="modeSeg">
+            <button data-mode="concise" class="active">精简版</button>
+            <button data-mode="full">完整版</button>
+          </div>
+        </div>
+        <div id="playerList"></div>
+        <div class="sb-section-title">故事</div>
+        <div id="storyList"></div>
+      </div>
+    </aside>
+
+  <button id="sidebarHandle" title="折叠/展开">▶</button>
+
+  <div id="locationModal">
+    <div class="loc-modal-card">
+      <div class="lm-head">
+        <button class="lm-back" id="lmBack" style="display:none">←</button>
+        <h2 id="lmTitle"></h2>
+        <button class="loc-modal-close" id="lmClose">✕</button>
+      </div>
+      <div id="lmBody">
+        <div id="lmText"></div>
+        <div id="lmScenes"></div>
+        <div id="lmProducts"></div>
+      </div>
+      <div id="lmToast"></div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/scenes.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
