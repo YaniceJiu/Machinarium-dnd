@@ -590,20 +590,41 @@ body { position: relative; }
 /* ================= 群众板 ================= */
 #boardPanel {
   position: fixed;
-  left: 14px;
-  top: 88px;
+  left: 0;
+  top: 84px;
   width: 390px;
-  max-height: calc(100vh - 110px);
+  max-height: calc(100vh - 96px);
   overflow-y: auto;
   background: var(--panel-bg);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: 0 8px 28px rgba(80,60,30,.38);
+  border-left: none;
+  border-radius: 0 14px 14px 0;
+  box-shadow: 6px 0 24px rgba(80,60,30,.38);
   padding: 14px 16px;
   z-index: 25;
-  display: none;
+  transition: transform .28s ease;
+  transform: translateX(0);
 }
-#boardPanel.open { display: block; }
+#boardPanel.collapsed { transform: translateX(-100%); }
+
+#boardHandle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px; height: 70px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  z-index: 55;
+  box-shadow: 2px 0 10px rgba(80,60,30,.2);
+  transition: left .28s ease;
+}
 
 .board-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
 .board-title { font-weight: 700; font-size: 17px; }

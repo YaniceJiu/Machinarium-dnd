@@ -231,11 +231,25 @@
     render();
   }
 
+  const panel = $('#boardPanel');
+  const handle = $('#boardHandle');
+
+  function updateHandle() {
+    if (!handle) return;
+    const collapsed = panel.classList.contains('collapsed');
+    handle.textContent = collapsed ? '▶' : '◀';
+    handle.title = collapsed ? '展开群众板' : '收起群众板';
+    handle.style.left = collapsed ? '0px' : (panel.offsetWidth + 'px');
+  }
+
   window.BOARD = {
-    show: () => $('#boardPanel').classList.add('open'),
-    hide: () => $('#boardPanel').classList.remove('open'),
-    toggle: () => $('#boardPanel').classList.toggle('open'),
+    show: () => { panel.classList.remove('collapsed'); updateHandle(); },
+    hide: () => { panel.classList.add('collapsed'); updateHandle(); },
+    toggle: () => { panel.classList.toggle('collapsed'); updateHandle(); },
+    isOpen: () => !panel.classList.contains('collapsed'),
   };
+
+  if (handle) handle.addEventListener('click', () => window.BOARD.toggle());
 
   $('#boardPrev').addEventListener('click', () => go(state.current - 1));
   $('#boardNext').addEventListener('click', () => go(state.current + 1));
@@ -245,4 +259,5 @@
   $('#boardClose').addEventListener('click', () => window.BOARD.hide());
 
   render();
+  updateHandle();
 })();
