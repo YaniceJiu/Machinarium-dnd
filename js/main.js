@@ -71,6 +71,7 @@
       wEl.addEventListener('click', () => {
         state.expandedWeek = (state.expandedWeek === week.id) ? null : week.id;
         renderTimeline();
+        syncBoard();
       });
 
       timelineBar.appendChild(wEl);
@@ -629,6 +630,12 @@
   });
 
   // ================= 启动 =================
+  function syncBoard() {
+    if (!window.BOARD) return;
+    if (state.expandedWeek === 'W2') window.BOARD.show();
+    else window.BOARD.hide();
+  }
+
   buildTimeline();
   buildWorld();
   buildPlayerList();

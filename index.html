@@ -18,6 +18,19 @@
 
   <header id="timelineBar"></header>
 
+  <div id="boardPanel">
+    <div class="board-head">
+      <span class="board-title">群众板</span>
+      <span id="boardDay">第 1 天</span>
+      <button id="boardReset" class="btn">重置</button>
+      <button id="boardClose" class="board-close">✕</button>
+    </div>
+    <div class="board-hint">每天结算：先传播（知情×3）→ 填加减（红/蓝/知情，可填 +/- 数字或百分比）→ 得当天最终</div>
+    <div class="board-total">总人口 500万 · 精英 15% · 学生 35% · 民众 50%</div>
+    <div id="boardGroups"></div>
+    <button id="boardSettle" class="btn primary board-settle">结算当天</button>
+  </div>
+
   <aside id="sidebar">
       <div id="sidebarBody">
         <div class="sb-section-title">玩家</div>
@@ -56,6 +69,7 @@
   <script src="js/scenes.js"></script>
   <script src="js/stories.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/board.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
