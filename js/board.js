@@ -253,6 +253,7 @@
     isOpen: () => !panel.classList.contains('collapsed'),
     getCurrent: () => ({ index: state.current, day: state.days[state.current].day }),
     getDays: () => state.days.length,
+    goTo: (i) => go(i),
   };
 
   if (handle) handle.addEventListener('click', () => window.BOARD.toggle());
