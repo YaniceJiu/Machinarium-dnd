@@ -185,6 +185,7 @@
   }
 
   function settle() {
+    const settledIdx = state.current;
     const day = state.days[state.current];
     day.deltas = readDeltas();
     recomputeFrom(state.current, state.days);
@@ -197,6 +198,7 @@
     save();
     render();
     flashDelta();
+    if (window.STOCK) window.STOCK.onSettle(settledIdx);
   }
 
   function flashDelta() {
@@ -223,12 +225,14 @@
     }
     save();
     render();
+    if (window.STOCK) window.STOCK.onUndo();
   }
 
   function reset() {
     state = initState();
     save();
     render();
+    if (window.STOCK) window.STOCK.onReset();
   }
 
   const panel = $('#boardPanel');
@@ -247,6 +251,8 @@
     hide: () => { panel.classList.add('collapsed'); updateHandle(); },
     toggle: () => { panel.classList.toggle('collapsed'); updateHandle(); },
     isOpen: () => !panel.classList.contains('collapsed'),
+    getCurrent: () => ({ index: state.current, day: state.days[state.current].day }),
+    getDays: () => state.days.length,
   };
 
   if (handle) handle.addEventListener('click', () => window.BOARD.toggle());

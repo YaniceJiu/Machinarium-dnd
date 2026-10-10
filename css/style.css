@@ -672,6 +672,23 @@ body { position: relative; }
 }
 .board-settle { width: 100%; margin-top: 4px; padding: 8px; }
 
+/* ================= 股票看板（金融街弹窗） ================= */
+#lmStock { margin-top: 2px; }
+.stock-head { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+.stock-head b { color: #8a6a2f; }
+.stock-row { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: var(--panel-bg2); }
+.stock-top { display: flex; justify-content: space-between; align-items: baseline; }
+.stock-name { font-weight: 700; font-size: 14px; }
+.stock-now { font-size: 13px; color: #8a6a2f; font-weight: 700; }
+.stock-hist { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; min-height: 18px; }
+.stock-chip { font-size: 11px; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
+.stock-chip.up { background: #fdecea; color: #c0392b; }
+.stock-chip.down { background: #e8f5e9; color: #2e7d32; }
+.stock-none { font-size: 11px; color: var(--muted); }
+.stock-ctrl { display: flex; gap: 6px; }
+.stock-btn { flex: 1; padding: 5px 0; border: 1px solid var(--border); border-radius: 6px; background: rgba(226,214,182,.7); color: var(--text); cursor: pointer; font-size: 12px; }
+.stock-btn.active { background: var(--accent); color: #fff8e6; font-weight: 700; }
+
 /* ================= 场景热点（商店互动，在弹窗框内） ================= */
 .hotspot {
   position: absolute;

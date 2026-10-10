@@ -48,6 +48,7 @@
   const lmText = $('#lmText');
   const lmScenes = $('#lmScenes');
   const lmProducts = $('#lmProducts');
+  const lmStock = $('#lmStock');
   const lmToast = $('#lmToast');
   let routeLayer;
 
@@ -492,6 +493,7 @@
     lmText.innerHTML = '';
     lmScenes.innerHTML = '';
     lmProducts.innerHTML = '';
+    if (lmStock) lmStock.innerHTML = '';
   }
 
   function closeModal() {
@@ -500,6 +502,7 @@
   }
 
   function onLocationClick(id) {
+    if (id === 'finance') { openFinanceStock(); return; }
     const content = SCENES.locContent[id];
     if (content && content.type === 'shop') { openShopStreet(); return; }
     if (content && content.type === 'scene') { openSceneContent(content); return; }
@@ -515,6 +518,14 @@
     lmText.innerHTML = info.text
       ? `<div class="lm-text">${info.text}</div>`
       : `<div class="lm-empty">暂无该地点的图文信息</div>`;
+  }
+
+  // 股票看板（金融街）
+  function openFinanceStock() {
+    if (!window.STOCK) { openLocationText('finance'); return; }
+    openModal(); resetModal();
+    lmTitle.textContent = '股票看板';
+    window.STOCK.renderFinance(lmStock);
   }
 
   // 场景图（单图或竖排多图，带小标题分隔）
