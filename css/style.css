@@ -676,18 +676,22 @@ body { position: relative; }
 #lmStock { margin-top: 2px; }
 .stock-head { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
 .stock-head b { color: #8a6a2f; }
-.stock-row { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; background: var(--panel-bg2); }
-.stock-top { display: flex; justify-content: space-between; align-items: baseline; }
-.stock-name { font-weight: 700; font-size: 14px; }
-.stock-now { font-size: 13px; color: #8a6a2f; font-weight: 700; }
-.stock-hist { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; min-height: 18px; }
-.stock-chip { font-size: 11px; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
-.stock-chip.up { background: #fdecea; color: #c0392b; }
-.stock-chip.down { background: #e8f5e9; color: #2e7d32; }
-.stock-none { font-size: 11px; color: var(--muted); }
-.stock-ctrl { display: flex; gap: 6px; }
-.stock-btn { flex: 1; padding: 5px 0; border: 1px solid var(--border); border-radius: 6px; background: rgba(226,214,182,.7); color: var(--text); cursor: pointer; font-size: 12px; }
-.stock-btn.active { background: var(--accent); color: #fff8e6; font-weight: 700; }
+.stock-main { display: flex; gap: 12px; align-items: stretch; }
+.stock-chart-wrap { flex: 1 1 auto; min-width: 0; }
+.stock-chart { display: block; }
+.stock-legend { flex: 0 0 148px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+.stock-lg { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.stock-lg-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.stock-lg-name { flex: 1 1 auto; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stock-lg-price { font-weight: 700; color: #8a6a2f; }
+.stock-lg-chg { font-weight: 700; font-size: 11px; }
+.stock-lg-chg.up { color: #c0392b; }
+.stock-lg-chg.down { color: #2e7d32; }
+.stock-ctrl { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.stock-lock { display: flex; align-items: center; gap: 4px; border: 1px solid var(--border); border-radius: 8px; padding: 4px 6px; background: var(--panel-bg2); }
+.stock-lock-name { font-size: 12px; color: var(--text); margin-right: 2px; white-space: nowrap; }
+.stock-btn { padding: 4px 9px; border: 1px solid var(--border); border-radius: 6px; background: rgba(226,214,182,.7); color: var(--text); cursor: pointer; font-size: 12px; }
+.stock-btn.active { background: var(--accent); color: #fff8e6; font-weight: 700; border-color: #b8862b; }
 
 /* ================= 场景热点（商店互动，在弹窗框内） ================= */
 .hotspot {
