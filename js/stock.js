@@ -4,7 +4,7 @@
   'use strict';
 
   const BASE = 100;          // 每股初始价
-  const PCT = 0.05;          // 每天涨跌幅（固定百分比 5%）
+  const PCT = 0.05;          // 每天涨跌幅上限（0~5% 随机）
   const TOTAL_DAYS = 12;     // 与群众板一致
   const LINES = [
     { id: 'port',  name: '港口运货',     color: '#e53935' },
@@ -16,7 +16,7 @@
   const CHART_H = 280;       // 图表 CSS 高度
 
   function makeDay(n) {
-    return { day: n, locks: {}, signs: {}, price: {} };
+    return { day: n, locks: {}, signs: {}, mags: {}, price: {} };
   }
   function initState() {
     return { days: [makeDay(1)] };
@@ -53,15 +53,15 @@
     while (state.days.length > boardDays() && state.days.length > 1) state.days.pop();
   }
 
-  // 结算某天：锁定→上/下；未锁定且未定→50% 掷币；已定则保持
+  // 结算某天：锁定→上/下；无锁定且未定→50% 掷币；已定则保持；涨幅 0~5% 随机
   function resolveDay(idx) {
     const d = state.days[idx];
     if (!d) return;
     LINES.forEach((l) => {
       const lock = d.locks[l.id];
-      if (lock === 'up') d.signs[l.id] = 1;
-      else if (lock === 'down') d.signs[l.id] = -1;
-      else if (d.signs[l.id] === undefined) d.signs[l.id] = Math.random() < 0.5 ? 1 : -1;
+      if (lock === 'up') { d.signs[l.id] = 1; if (d.mags[l.id] === undefined) d.mags[l.id] = Math.random() * PCT; }
+      else if (lock === 'down') { d.signs[l.id] = -1; if (d.mags[l.id] === undefined) d.mags[l.id] = Math.random() * PCT; }
+      else if (d.signs[l.id] === undefined) { d.signs[l.id] = Math.random() < 0.5 ? 1 : -1; d.mags[l.id] = Math.random() * PCT; }
     });
   }
 
@@ -70,10 +70,12 @@
     LINES.forEach((l) => { prev[l.id] = BASE; });
     state.days.forEach((d) => {
       d.price = d.price || {};
+      d.mags = d.mags || {};
       LINES.forEach((l) => {
         const s = d.signs[l.id];
         if (s === undefined) { d.price[l.id] = null; return; }
-        prev[l.id] = Math.round(prev[l.id] * (1 + s * PCT) * 100) / 100;
+        const mag = (d.mags[l.id] === undefined) ? PCT : d.mags[l.id];
+        prev[l.id] = Math.round(prev[l.id] * (1 + s * mag) * 100) / 100;
         d.price[l.id] = prev[l.id];
       });
     });
@@ -81,25 +83,28 @@
 
   function isToday(idx) { return idx === state.days.length - 1; }
 
-  // 把某天里所有"未定"的线掷币（生成当天 / 结算兜底）
+  // 把某天里所有"未定"的线掷币（生成当天 / 结算兜底），涨幅 0~5% 随机
   function rollPending(idx) {
     const d = state.days[idx];
     if (!d) return;
     LINES.forEach((l) => {
-      if (d.signs[l.id] === undefined) d.signs[l.id] = Math.random() < 0.5 ? 1 : -1;
+      if (d.signs[l.id] === undefined) {
+        d.signs[l.id] = Math.random() < 0.5 ? 1 : -1;
+        d.mags[l.id] = Math.random() * PCT;
+      }
     });
   }
 
-  // 设置某天某线方向：上/下立即定向；自动 → 今天回到待定、过去天随机补上
+  // 设置某天某线方向：上/下立即定向（涨幅 0~5% 随机）；自动 → 今天回到待定、过去天随机补上
   function applyLock(idx, lineId, val) {
     const d = state.days[idx];
     if (!d) return;
-    if (val === 'up') { d.locks[lineId] = 'up'; d.signs[lineId] = 1; }
-    else if (val === 'down') { d.locks[lineId] = 'down'; d.signs[lineId] = -1; }
+    if (val === 'up') { d.locks[lineId] = 'up'; d.signs[lineId] = 1; if (d.mags[lineId] === undefined) d.mags[lineId] = Math.random() * PCT; }
+    else if (val === 'down') { d.locks[lineId] = 'down'; d.signs[lineId] = -1; if (d.mags[lineId] === undefined) d.mags[lineId] = Math.random() * PCT; }
     else {
       d.locks[lineId] = null;
-      if (isToday(idx)) delete d.signs[lineId];
-      else if (d.signs[lineId] === undefined) d.signs[lineId] = Math.random() < 0.5 ? 1 : -1;
+      if (isToday(idx)) { delete d.signs[lineId]; delete d.mags[lineId]; }
+      else if (d.signs[lineId] === undefined) { d.signs[lineId] = Math.random() < 0.5 ? 1 : -1; d.mags[lineId] = Math.random() * PCT; }
     }
     recomputePrices();
     save();
@@ -307,7 +312,7 @@
     head.appendChild(nextBtn);
     const hint = document.createElement('span');
     hint.className = 'stock-hint';
-    hint.textContent = '每日 ±' + Math.round(PCT * 100) + '% · 自动=50%上/下 · 设上/下则按设定';
+    hint.textContent = '每日 0~' + Math.round(PCT * 100) + '% 随机涨跌 · 自动=50%上/下 · 设上/下则按设定';
     head.appendChild(hint);
     container.appendChild(head);
 
