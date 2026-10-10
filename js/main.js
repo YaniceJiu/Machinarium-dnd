@@ -594,7 +594,7 @@
           `<img src="${p.img}" alt="${p.name}">` +
           `<div class="p-info">` +
             `<div class="p-name">${p.name}</div>` +
-            `<div class="p-price">${p.price} 块</div>` +
+            `<div class="p-price">${p.price} 🔪</div>` +
           `</div>`;
         list.appendChild(card);
       });

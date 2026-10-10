@@ -49,6 +49,13 @@ window.SCENES = {
       { name: '冥想疗愈', price: 20, img: 'items/meditation.png' },
       { name: '科学仪器', price: 35, img: 'items/instrument.png' },
       { name: '干草叉', price: 18, img: 'items/pitchfork.png' },
+      { name: '缝纫机图纸', price: 79, img: 'items/sewing.png' },
+      { name: '小船发动机图纸', price: 69, img: 'items/engine.png' },
+      { name: '手枪图纸', price: 123, img: 'items/pistol.png' },
+      { name: '起死回生药', price: 25, img: 'items/herb_revive.png' },
+      { name: '狂战士', price: 15, img: 'items/herb_berserk.png' },
+      { name: '毒药', price: 15, img: 'items/herb_poison.png' },
+      { name: '治疗', price: 15, img: 'items/herb_heal.png' },
     ],
   },
 };
